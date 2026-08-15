@@ -84,8 +84,8 @@ npm start
 예:
 
 ```php
-// api/config.phastapi.php
-$G_PHASTAPI_CUSTOM_DIR = "../wikiman-php"; // 또는 wikiman-backend-php 클론 경로
+// phastapiv2의 config.phastapi.php
+$G_PHASTAPI_CUSTOM_DIR = "../wikiman-backend-php";
 ```
 
 프론트는 `baseURL: '/api'`로 동일 오리진 API를 호출합니다.
