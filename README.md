@@ -12,7 +12,7 @@ Wikiman은 혼자 쓰는 위키를 목표로 합니다. 글·카테고리·첨�
 | --- | --- | --- |
 | **wikiman-frontend** | Vue 3 + Quasar PWA UI | [kendrickkim/wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend) |
 | **wikiman-backend** | Node.js + Express + SQLite API (원본) | [kendrickkim/wikiman-backend](https://github.com/kendrickkim/wikiman-backend) |
-| **wikiman-php** | PHP 백엔드 앱 (Node API와 호환) | 이 워크스페이스의 `wikiman-php` (PHAST 사용자 앱) |
+| **wikiman-backend-php** | PHP 백엔드 앱 (Node API와 호환) | [kendrickkim/wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) |
 | **phastapiv2** | PHP REST 프레임워크 (PHAST API v2) | [kendrickkim/phastapiv2](https://github.com/kendrickkim/phastapiv2) |
 
 ```text
@@ -23,12 +23,13 @@ Wikiman은 혼자 쓰는 위키를 목표로 합니다. 글·카테고리·첨�
                │ 동일 오리진 /api
        ┌───────┴────────┐
        ▼                ▼
-┌─────────────┐   ┌──────────────────┐
-│  Node 경로  │   │    PHP 경로      │
-│ wikiman-    │   │ phastapiv2       │
-│ backend     │   │   + wikiman-php  │
-│ Express     │   │ Apache + SQLite  │
-└─────────────┘   └──────────────────┘
+┌─────────────┐   ┌──────────────────────┐
+│  Node 경로  │   │       PHP 경로       │
+│ wikiman-    │   │ phastapiv2           │
+│ backend     │   │   + wikiman-backend- │
+│ Express     │   │     php              │
+│             │   │ Apache + SQLite      │
+└─────────────┘   └──────────────────────┘
 ```
 
 프론트엔드는 **하나의 API 계약**을 기대합니다.  
@@ -39,10 +40,10 @@ Wikiman은 혼자 쓰는 위키를 목표로 합니다. 글·카테고리·첨�
 `wikiman-backend`는 Node 런타임이 필요합니다.  
 공유 호스팅처럼 **Apache + PHP + SQLite**만 가능한 환경에서도 같은 위키를 돌리기 위해 PHP로 API를 옮기는 작업이 진행되었습니다.
 
-- 앱 로직: `wikiman-php` (도메인·필터·JWT·SQLite)
+- 앱 로직: [wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) (도메인·필터·JWT·SQLite)
 - 공통 프레임워크: [phastapiv2](https://github.com/kendrickkim/phastapiv2)
 
-PHAST API는 라우팅, Attribute, 요청 파싱, 필터, 응답 훅만 담당하고, Wikiman 전용 규칙은 `wikiman-php`에 둡니다.
+PHAST API는 라우팅, Attribute, 요청 파싱, 필터, 응답 훅만 담당하고, Wikiman 전용 규칙은 `wikiman-backend-php`에 둡니다.
 
 ## 기능 요약
 
@@ -77,14 +78,14 @@ npm start
 
 1. 문서 루트에 프론트 PWA 빌드 결과를 둡니다.
 2. [phastapiv2](https://github.com/kendrickkim/phastapiv2)를 `/api`로 배치합니다.
-3. `wikiman-php`를 PHAST의 `$G_PHASTAPI_CUSTOM_DIR`로 연결합니다.
+3. [wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php)를 PHAST의 `$G_PHASTAPI_CUSTOM_DIR`로 연결합니다.
 4. PHP에 `pdo_sqlite`, `mbstring`, `fileinfo`, `curl`, `zlib` 등이 필요합니다.
 
 예:
 
 ```php
 // api/config.phastapi.php
-$G_PHASTAPI_CUSTOM_DIR = "../wikiman-php";
+$G_PHASTAPI_CUSTOM_DIR = "../wikiman-php"; // 또는 wikiman-backend-php 클론 경로
 ```
 
 프론트는 `baseURL: '/api'`로 동일 오리진 API를 호출합니다.
@@ -103,11 +104,12 @@ $G_PHASTAPI_CUSTOM_DIR = "../wikiman-php";
 - 업로드, 백업(`.wkmbak`), 링크 미리보기, PlantUML
 - API 계약의 **기준 구현**
 
-### wikiman-php
+### wikiman-backend-php
 
 - Node API와 같은 경로·응답을 PHAST 앱으로 구현
 - `domain/` + `libs/common/` + 권한 Attribute/필터
 - 데이터: `data/wiki.db`, `data/uploads/`
+- 저장소: [kendrickkim/wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php)
 
 ### phastapiv2
 
@@ -115,6 +117,7 @@ $G_PHASTAPI_CUSTOM_DIR = "../wikiman-php";
 - PHP 8 Attribute (`_GET_`, `_POST_`, `_PUT_`, `_PATCH_`, `_DELETE_`)
 - IN/OUT 필터, multipart/`json_body`, 응답 포매터 훅
 - 앱 전용 코드는 custom 디렉터리에 분리
+- `/api/docs` 문서 UI (검색·메서드 필터·다크/라이트 테마)
 
 자세한 사용법은 [phastapiv2 README](https://github.com/kendrickkim/phastapiv2/blob/master/README.md)를 보세요.
 
@@ -166,4 +169,5 @@ Authorization: Bearer <jwt>
 
 - Frontend: https://github.com/kendrickkim/wikiman-frontend  
 - Backend (Node): https://github.com/kendrickkim/wikiman-backend  
+- Backend (PHP): https://github.com/kendrickkim/wikiman-backend-php  
 - PHAST API v2: https://github.com/kendrickkim/phastapiv2  
