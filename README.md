@@ -41,17 +41,24 @@ Wikiman은 “문서 위키”와 “개인 블로그”를 한 제품에 묶은
 | **wikiman-frontend** | Vue 3 + Quasar PWA UI | [kendrickkim/wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend) |
 | **wikiman-backend** | Node.js + Express + SQLite API (원본) | [kendrickkim/wikiman-backend](https://github.com/kendrickkim/wikiman-backend) |
 | **wikiman-backend-php** | PHP 백엔드 앱 (Node API와 호환) | [kendrickkim/wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) |
-| **wikiman_flutter** | Android·iOS 관리자 WebView·공유 앱 | [kendrickkim/wikiman_flutter](https://github.com/kendrickkim/wikiman_flutter) |
+| **wikiman-flutter** | Android·iOS 관리자 WebView·공유 앱 | [kendrickkim/wikiman-flutter](https://github.com/kendrickkim/wikiman-flutter) |
 | **phastapiv2** | PHP REST 프레임워크 (PHAST API v2) | [kendrickkim/phastapiv2](https://github.com/kendrickkim/phastapiv2) |
 
 ```text
 ┌─────────────────────────────┐
-│      wikiman-frontend       │
-│   Vue 3 + Quasar (PWA)      │
-└──────────────┬──────────────┘
-               │ 동일 오리진 /api
-       ┌───────┴────────┐
-       ▼                ▼
+│      wikiman-flutter        │
+│  WebView + 공유 수신 (관리자) │
+└──────┬───────────────┬──────┘
+       │ WebView       │ /api (로그인·업로드)
+       ▼               │
+┌──────────────────┐   │
+│ wikiman-frontend │   │
+│ Vue 3 + Quasar   │   │
+└────────┬─────────┘   │
+         │ 동일 오리진 /api
+         └───────┬─────┘
+         ┌───────┴────────┐
+         ▼                ▼
 ┌─────────────┐   ┌──────────────────────┐
 │  Node 경로  │   │       PHP 경로       │
 │ wikiman-    │   │ phastapiv2           │
@@ -63,6 +70,8 @@ Wikiman은 “문서 위키”와 “개인 블로그”를 한 제품에 묶은
 
 프론트엔드는 **하나의 API 계약**을 기대합니다.  
 따라서 Node 백엔드와 PHP 백엔드는 경로·JSON·권한·상태 코드를 맞추도록 포팅했습니다.
+
+관리자용 모바일 앱(`wikiman-flutter`)은 배포된 Wikiman을 WebView로 열고, 로그인·공유 업로드는 `/api`를 직접 호출합니다. `writer` 권한이 확인된 뒤에만 WebView에 진입합니다.
 
 ## 왜 PHP 경로가 있는가
 
@@ -139,6 +148,21 @@ $G_PHASTAPI_CUSTOM_DIR = "../wikiman-backend-php";
 
 자세한 사용법은 [phastapiv2 README](https://github.com/kendrickkim/phastapiv2/blob/master/README.md)를 보세요.
 
+### wikiman-flutter
+
+- Flutter 기반 Android·iOS 관리자 전용 앱
+- Wikiman URL·관리자 아이디·비밀번호 입력 후, 로그인 API에서 `writer` 권한을 확인한 뒤에만 WebView 진입
+- 접속 정보는 기기 보안 저장소에 보관하고 다음 입력 화면에 다시 표시
+- 웹 로그아웃 시 접속 정보 화면으로 자동 복귀
+- 앱에서만 웹 사용자 메뉴에 **접속 정보 변경** 표시
+- Android·iOS 공유 메뉴에서 **Wikiman**으로 텍스트·이미지·파일 수신 → 업로드 후 간단 포스트 새 입력 화면에 Markdown 초안 전달
+- 사설망 HTTP Wikiman도 쓸 수 있도록 평문 HTTP를 허용(외부망은 HTTPS 권장)
+- 공유 파일 용량 제한은 사이트 관리의 첨부파일 설정을 따르며 서버에서도 검증
+- iOS 배포 시 Runner와 ShareExtension에 같은 Development Team·App Group 필요
+- 저장소: [kendrickkim/wikiman-flutter](https://github.com/kendrickkim/wikiman-flutter)
+
+자세한 사용법은 [wikiman-flutter README](https://github.com/kendrickkim/wikiman-flutter/blob/main/README-kr.md)를 보세요.
+
 ## API 계약 (공통)
 
 성공 응답은 Wikiman 전용 형식입니다. PHAST 기본 `{ success, data }` 래핑을 PHP 경로에서는 쓰지 않습니다.
@@ -190,4 +214,5 @@ Authorization: Bearer <jwt>
 - Frontend: https://github.com/kendrickkim/wikiman-frontend  
 - Backend (Node): https://github.com/kendrickkim/wikiman-backend  
 - Backend (PHP): https://github.com/kendrickkim/wikiman-backend-php  
+- Flutter (관리자 앱): https://github.com/kendrickkim/wikiman-flutter  
 - PHAST API v2: https://github.com/kendrickkim/phastapiv2  
