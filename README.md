@@ -32,6 +32,7 @@ Wikiman은 “문서 위키”와 “개인 블로그”를 한 제품에 묶은
 - 사이트 관리(일반·카테고리·홈페이지·블로그·간단 포스트·첨부·데이터·상단 메뉴)
 - 사이트 언어(한국어 / English), PWA, 서버 사이드 Open Graph/Twitter 카드
 - 인증: JWT, 최초 1명만 작성자 가입
+- Android·iOS 관리자 앱(WebView, 접속 정보 보안 저장, 간단 포스트 공유 수신)
 
 ## 구성 프로젝트
 
@@ -40,6 +41,7 @@ Wikiman은 “문서 위키”와 “개인 블로그”를 한 제품에 묶은
 | **wikiman-frontend** | Vue 3 + Quasar PWA UI | [kendrickkim/wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend) |
 | **wikiman-backend** | Node.js + Express + SQLite API (원본) | [kendrickkim/wikiman-backend](https://github.com/kendrickkim/wikiman-backend) |
 | **wikiman-backend-php** | PHP 백엔드 앱 (Node API와 호환) | [kendrickkim/wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) |
+| **wikiman_flutter** | Android·iOS 관리자 WebView·공유 앱 | [kendrickkim/wikiman_flutter](https://github.com/kendrickkim/wikiman_flutter) |
 | **phastapiv2** | PHP REST 프레임워크 (PHAST API v2) | [kendrickkim/phastapiv2](https://github.com/kendrickkim/phastapiv2) |
 
 ```text
