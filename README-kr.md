@@ -2,244 +2,136 @@
 
 # Wikiman
 
-개인 위키 **Wikiman**의 전체 구성과 저장소 안내입니다.
+개인 위키와 작은 블로그를 함께 운영하는 자기호스팅 도구입니다.
 
-Wikiman은 혼자 쓰는 위키를 목표로 합니다. 글·카테고리·첨부·간단 포스트·백업·링크 미리보기·PlantUML을 제공하고, 첫 가입 계정만 작성자(`writer`)가 될 수 있습니다.
+카테고리와 키워드로 지식을 정리하고, 초안은 비공개로 보관하며, 원하는 글은
+시간순 블로그로 발행할 수 있습니다. 간단 포스트로 메모를 빠르게 남길 수 있고,
+데이터 폴더 하나를 백업해 사이트를 옮길 수 있습니다.
 
-이 저장소는 소스 코드를 모은 모노레포가 아니라, 관련 프로젝트를 한눈에 보기 위한 **허브(문서) 저장소**입니다.
+이 저장소는 전체 프로젝트를 안내하는 **허브**입니다. 실제 소스 코드는 아래
+저장소에 나뉘어 있습니다.
 
-## 특징
+## 이런 경우에 잘 맞습니다
 
-Wikiman은 “문서 위키”와 “개인 블로그”를 한 제품에 묶은 자기호스팅 도구입니다. Notion·Wiki.js 같은 위키만, 또는 Ghost·WordPress 같은 블로그만 쓰는 것과 달리, **지식 정리와 시간순 발행을 같은 데이터·같은 UI에서** 오갈 수 있습니다.
+Wikiman은 여러 사람이 함께 편집하는 공개 위키보다 한 명이 관리하는 개인 공간을
+목표로 합니다.
 
-- **위키 + 블로그 하이브리드** — 카테고리 트리·키워드·검색으로 지식을 쌓고, 블로그 모드를 켜면 홈이 최근 발행 글 본문 피드가 됩니다. 필요하면 홈페이지로 지정한 글을 피드보다 먼저(맨 위)에 고정해 둘 수 있습니다.
-- **에디터를 글마다 고름** — 텍스트, CKEditor, Summernote, TUI, Editor.js, Markdown, HTML을 지원합니다. 작성·수정 중 에디터를 바꿔도 본문이 사라지지 않도록, 가능한 범위에서 HTML·텍스트로 이어 받습니다.
-- **가벼운 자기호스팅** — SQLite와 업로드 디렉터리만으로 동작합니다. DB 서버·플러그인 생태계에 묶이지 않고 `data/`만 백업하면 이전할 수 있습니다. Node(Express)뿐 아니라 **Apache + PHP** 경로로도 같은 API를 돌릴 수 있습니다.
-- **공개와 초안의 경계가 분명함** — 초안 저장·발행, 글·카테고리 공개/비공개, 작성자만 쓰는 휴지통(복원·완전 삭제)을 기본으로 둡니다. 초안 글 보기에서는 확인 후 바로 발행할 수 있습니다.
-- **마크다운을 제대로 씀** — PlantUML 다이어그램, 코드 하이라이트, 라인 번호, 코드 블록 복사 버튼을 지원합니다. 공유용 Open Graph는 서버가 HTML에 넣어 주므로 SNS 크롤러에도 제목·요약·이미지가 맞습니다.
-- **일상 작성에 맞춘 UX** — 모바일 간단 포스트, PWA, 상단 메뉴, 사이트 언어(한국어 / English), 글자 크기·다크 모드·오른쪽 카테고리 패널 기본 열림 등 사이트 관리에서 바로 조절합니다. DokuWiki 가져오기로 기존 문서를 옮길 수 있습니다.
+다음과 같은 도구를 찾는다면 적합합니다.
 
-다른 플랫폼과의 자리매김을 한 줄로 말하면, **혼자 쓰는 위키의 구조에 블로그형 발행·공유를 얹되, SaaS나 무거운 CMS 없이 운영**하는 쪽입니다.
+- 같은 글을 위키처럼 정리하고 블로그처럼 발행
+- SaaS 계정 대신 직접 호스팅해 데이터 소유
+- SQLite 기반의 단순한 백업과 이전
+- Markdown, TUI, CKEditor, Editor.js 등 여러 편집기
+- 휴대폰 사진과 파일을 간단 포스트로 보내는 보조 앱
 
-## 주요 기능
+첫 번째 가입 계정만 작성자가 됩니다. 방문자는 작성자가 공개한 글을 읽을 수 있습니다.
 
-- 카테고리 트리(공개/비공개), 키워드, 검색, 휴지통
-- 홈페이지 지정 글 / 블로그 모드 피드(페이지당 글 수, 홈페이지 글 선표시)
-- 다중 에디터와 에디터 전환 시 본문 이어받기
-- 초안·발행, 공개·비공개, 초안 보기에서 발행
-- Markdown 코드 하이라이트·라인 번호·복사, PlantUML
-- 간단 포스트와 정식 글로 승격
-- 첨부 파일·이미지 업로드와 파일 접근 제어
-- 링크 미리보기 캐시(SSRF 방어), 백업·복구(`.wkmbak`)
-- 사이트 관리(일반·카테고리·홈페이지·블로그·간단 포스트·첨부·데이터·상단 메뉴)
-- 사이트 언어(한국어 / English), PWA, 서버 사이드 Open Graph/Twitter 카드
-- 인증: JWT, 최초 1명만 작성자 가입
-- Android·iOS 관리자 앱(WebView, 접속 정보 보안 저장, 간단 포스트 공유 수신)
+## 배포 방식 선택
+
+프론트엔드는 하나이며, 실행 환경에 따라 백엔드를 선택합니다.
+
+| 실행 환경 | 백엔드 | 선택 기준 |
+| --- | --- | --- |
+| Node.js 사용 가능 | [wikiman-backend](https://github.com/kendrickkim/wikiman-backend) | 기준 구현이며 배포가 가장 단순함 |
+| Apache 또는 Nginx + PHP | [wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) + [phastapiv2](https://github.com/kendrickkim/phastapiv2) | Node.js 없는 공유 호스팅, SQLite 또는 MySQL |
+
+두 백엔드는 [wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend)에
+같은 API를 제공합니다.
+
+```text
+Android·iOS 앱 ─┐
+                 ├─ Wikiman 프론트엔드 ── /api ── Node 백엔드
+웹 브라우저 ────┘                              └─ PHP 백엔드 + PHAST
+```
 
 ## 구성 프로젝트
 
-| 프로젝트 | 역할 | 저장소 |
-| --- | --- | --- |
-| **wikiman-frontend** | Vue 3 + Quasar PWA UI | [kendrickkim/wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend) |
-| **wikiman-backend** | Node.js + Express + SQLite API (원본) | [kendrickkim/wikiman-backend](https://github.com/kendrickkim/wikiman-backend) |
-| **wikiman-backend-php** | PHP 백엔드 앱 (Node API와 호환) | [kendrickkim/wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) |
-| **wikiman-flutter** | Android·iOS 관리자 WebView·공유 앱 | [kendrickkim/wikiman-flutter](https://github.com/kendrickkim/wikiman-flutter) |
-| **phastapiv2** | PHP REST 프레임워크 (PHAST API v2) | [kendrickkim/phastapiv2](https://github.com/kendrickkim/phastapiv2) |
+| 저장소 | 역할 |
+| --- | --- |
+| [wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend) | Vue 3 + Quasar PWA |
+| [wikiman-backend](https://github.com/kendrickkim/wikiman-backend) | Node.js + Express + SQLite API 및 웹 호스트 |
+| [wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) | PHP API와 웹 설치 화면 |
+| [phastapiv2](https://github.com/kendrickkim/phastapiv2) | PHP 백엔드가 사용하는 REST 프레임워크 |
+| [wikiman-flutter](https://github.com/kendrickkim/wikiman-flutter) | Android·iOS 관리자 WebView·공유 앱 |
 
-```text
-┌─────────────────────────────┐
-│      wikiman-flutter        │
-│  WebView + 공유 수신 (관리자) │
-└──────┬───────────────┬──────┘
-       │ WebView       │ /api (로그인·업로드)
-       ▼               │
-┌──────────────────┐   │
-│ wikiman-frontend │   │
-│ Vue 3 + Quasar   │   │
-└────────┬─────────┘   │
-         │ 동일 오리진 /api
-         └───────┬─────┘
-         ┌───────┴────────┐
-         ▼                ▼
-┌─────────────┐   ┌──────────────────────┐
-│  Node 경로  │   │       PHP 경로       │
-│ wikiman-    │   │ phastapiv2           │
-│ backend     │   │   + wikiman-backend- │
-│ Express     │   │     php              │
-│             │   │ Apache + SQLite/MySQL│
-└─────────────┘   └──────────────────────┘
-```
-
-프론트엔드는 **하나의 API 계약**을 기대합니다.  
-따라서 Node 백엔드와 PHP 백엔드는 경로·JSON·권한·상태 코드를 맞추도록 포팅했습니다.
-
-관리자용 모바일 앱(`wikiman-flutter`)은 배포된 Wikiman을 WebView로 열고, 로그인·공유 업로드는 `/api`를 직접 호출합니다. `writer` 권한이 확인된 뒤에만 WebView에 진입합니다.
-
-## 왜 PHP 경로가 있는가
-
-`wikiman-backend`는 Node 런타임이 필요합니다.  
-공유 호스팅처럼 **Apache + PHP + SQLite**(또는 MySQL)만 가능한 환경에서도 같은 위키를 돌리기 위해 PHP로 API를 옮기는 작업이 진행되었습니다.
-
-- 앱 로직: [wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php) (도메인·필터·JWT·SQLite/MySQL)
-- 공통 프레임워크: [phastapiv2](https://github.com/kendrickkim/phastapiv2)
-
-PHAST API는 라우팅, Attribute, 요청 파싱, 필터, 응답 훅만 담당하고, Wikiman 전용 규칙은 `wikiman-backend-php`에 둡니다.
-
-## 빠른 시작
-
-### A. Node로 로컬 실행
-
-1. [wikiman-backend](https://github.com/kendrickkim/wikiman-backend) 설치·실행 (`API` 기본 포트 85)
-2. [wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend)에서 `npm run dev`
-3. 브라우저: `http://localhost:9000`
-
-배포 시 프론트를 PWA로 빌드해 백엔드 `public/`에 넣는 흐름을 권장합니다.
+## Node.js로 빠르게 시작
 
 ```bash
-# frontend 저장소
+git clone https://github.com/kendrickkim/wikiman-backend.git
+git clone https://github.com/kendrickkim/wikiman-frontend.git
+
+cd wikiman-backend
+npm install
+cp .env.example .env
+npm run dev
+
+# 다른 터미널에서
+cd ../wikiman-frontend
+npm install
+npm run dev
+```
+
+`http://localhost:9000`을 여세요. 처음 만든 계정이 작성자가 됩니다.
+
+운영할 때는 PWA를 백엔드로 빌드하고 웹 호스트를 시작합니다.
+
+```bash
+# wikiman-frontend
 npm run build:backend
-# backend 저장소
+
+# wikiman-backend
 npm start
 ```
 
-### B. PHP 호스팅으로 실행
+환경 변수와 리버스 프록시 설정은
+[Node 백엔드 README](https://github.com/kendrickkim/wikiman-backend/blob/main/README-kr.md)를
+참고하세요.
 
-1. 문서 루트는 `wikiman-backend-php/public/` 이어야 합니다.
-2. [phastapiv2](https://github.com/kendrickkim/phastapiv2)를 동일 오리진 `/api`로 배치합니다.
-3. [wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php)를 PHAST의 `$G_PHASTAPI_CUSTOM_DIR`로 연결합니다.
-4. 프론트 PWA를 PHP `public/`에 넣되 설치 게이트 파일을 보존합니다.
+## PHP 호스팅으로 빠르게 시작
 
-```bash
-# frontend 저장소 (wikiman-backend-php와 형제 경로)
-npm run build:php
-```
+PHP 방식은 세 프로젝트를 함께 사용합니다.
 
-`build:php`는 PWA를 `wikiman-backend-php/public/`에 복사하면서 `index.php`,
-`install.php`, `.htaccess`를 보존합니다.
+1. [wikiman-frontend](https://github.com/kendrickkim/wikiman-frontend)에서
+   `npm run build:php` 실행
+2. `wikiman-backend-php/public/`을 Apache 또는 Nginx 문서 루트로 지정
+3. [phastapiv2](https://github.com/kendrickkim/phastapiv2)를 `/api`로 연결하고
+   사용자 정의 앱 경로를 `wikiman-backend-php`로 지정
+4. 사이트를 열어 웹 설치 완료
 
-5. PHP에 `pdo_sqlite`(또는 `pdo_mysql`), `mbstring`, `fileinfo`, `curl`, `zlib`와
-   Apache `mod_rewrite`가 필요합니다.
+설치 화면에서 첫 관리자와 SQLite 또는 MySQL/MariaDB를 설정합니다. Apache·Nginx
+구성과 보안 설정은
+[PHP 백엔드 README](https://github.com/kendrickkim/wikiman-backend-php/blob/main/README-kr.md)를
+참고하세요.
 
-예:
+## 주요 기능
 
-```php
-// phastapiv2의 config.phastapi.php
-$G_PHASTAPI_CUSTOM_DIR = "../wikiman-backend-php";
-```
+- 카테고리, 키워드, 검색, 초안, 발행, 휴지통
+- 위키 홈페이지 또는 시간순 블로그 모드
+- 텍스트, 리치 텍스트, 구조화, Markdown, HTML 편집기
+- 나중에 정식 글로 옮길 수 있는 간단 포스트
+- 첨부 파일, 파일 접근 제어, 업로드 용량 제한
+- PlantUML, 코드 강조, 줄 번호, 복사 버튼
+- 서버 요청을 보호하는 링크 미리보기
+- 한국어·영어 사이트 UI
+- PWA와 서버에서 생성하는 SNS 공유 정보
+- SQLite 배포의 백업과 복원
 
-처음 접속하면 `install.php`가 사이트 제목, 첫 관리자 계정, SQLite 또는 MySQL
-설정을 받아 웹에서 접근할 수 없는 `data/config.php`에 저장합니다. 정상 설치
-이후에는 웹 재설치가 차단되고, 설정이 깨진 경우에만 같은 화면으로 복구할 수
-있습니다.
+## 모바일 앱
 
-프론트는 `baseURL: '/api'`로 동일 오리진 API를 호출합니다.
+[wikiman-flutter](https://github.com/kendrickkim/wikiman-flutter)는 Android와
+iOS용 관리자 보조 앱입니다. 작성자 권한을 확인한 뒤 사이트를 WebView로 열고,
+휴대폰 공유 메뉴에서 받은 글·사진·파일을 간단 포스트 초안으로 보냅니다.
 
-## 저장소별 역할
+이미 운영 중인 Wikiman에 연결해 사용하는 앱이며, 프론트엔드와 백엔드 서버를
+포함하지는 않습니다.
 
-### wikiman-frontend
+## 운영 시 기억할 점
 
-- Vue 3, Quasar, Pinia, PWA
-- 사이트 언어(한국어 / English)와 UI·오류 메시지 번역 (`src/i18n/`)
-- 에디터: 텍스트 / CKEditor / Summernote / TUI / Editor.js / Markdown / HTML
-- 서비스 워커는 `/api`를 캐시하지 않음
-- 모바일 WebView: `viewport-fit=cover`와 CSS
-  `env(safe-area-inset-*)` 및 `--wikiman-safe-*` 폴백으로 노치·홈 인디케이터 처리
-- 배포 도우미: `npm run build:backend`, `npm run build:php`
+- `.env`, DB, 업로드, PHP의 `data/config.php`를 Git에 올리지 않기
+- 운영 환경에 강한 JWT 비밀키 사용
+- 외부에 공개하는 사이트는 HTTPS 사용
+- DB뿐 아니라 데이터 폴더 전체를 백업
+- MySQL/MariaDB는 호스팅 스냅샷이나 `mysqldump` 사용. 현재 `.wkmbak`은
+  SQLite 배포를 대상으로 함
 
-### wikiman-backend
-
-- Express 라우트, JWT, SQLite(`better-sqlite3`)
-- 업로드, 백업(`.wkmbak`), 링크 미리보기, PlantUML
-- API 계약의 **기준 구현**
-
-### wikiman-backend-php
-
-- Node API와 같은 경로·응답을 PHAST 앱으로 구현
-- `domain/` + `libs/common/` + 권한 Attribute/필터
-- 데이터: `data/wiki.db`(또는 MySQL), `data/uploads/`, `data/config.php`
-- 웹 문서 루트: `public/` (설치 게이트 `index.php`, `install.php`)
-- 저장소: [kendrickkim/wikiman-backend-php](https://github.com/kendrickkim/wikiman-backend-php)
-
-### phastapiv2
-
-- 경량 PHP REST 프레임워크
-- PHP 8 Attribute (`_GET_`, `_POST_`, `_PUT_`, `_PATCH_`, `_DELETE_`)
-- IN/OUT 필터, multipart/`json_body`, 응답 포매터 훅
-- 앱 전용 코드는 custom 디렉터리에 분리
-- `/api/docs` 문서 UI (검색·메서드 필터·다크/라이트 테마)
-
-자세한 사용법은 [phastapiv2 README](https://github.com/kendrickkim/phastapiv2/blob/master/README.md)를 보세요.
-
-### wikiman-flutter
-
-- Flutter 기반 Android·iOS 관리자 전용 앱 (표시 이름 **Wikiman**)
-- Wikiman URL·관리자 아이디·비밀번호 입력 후, 로그인 API에서 `writer` 권한을 확인한 뒤에만 WebView 진입
-- 접속 정보는 기기 보안 저장소에 보관하고 다음 입력 화면에 다시 표시
-- 웹 로그아웃 시 접속 정보 화면으로 자동 복귀
-- 앱에서만 웹 사용자 메뉴에 **접속 정보 변경** 표시
-- Android·iOS 공유 메뉴에서 **Wikiman**으로 텍스트·이미지·파일 수신 → 업로드 후 간단 포스트 새 입력 화면에 Markdown 초안 전달
-- WebView 테마에 맞춰 상·하단 시스템 영역을 맞추고, safe-area inset을 웹 UI에 전달
-- 앱·런처 아이콘은 프론트엔드 파비콘을 따름 (`tool/generate-app-icons.mjs`)
-- 사설망 HTTP Wikiman도 쓸 수 있도록 평문 HTTP를 허용(외부망은 HTTPS 권장)
-- 공유 파일 용량 제한은 사이트 관리의 첨부파일 설정을 따르며 서버에서도 검증
-- iOS 배포 시 Runner와 ShareExtension에 같은 Development Team·App Group 필요.
-  공유 파일은 App Group 컨테이너로 복사한 뒤 메인 앱이 읽음
-- 저장소: [kendrickkim/wikiman-flutter](https://github.com/kendrickkim/wikiman-flutter)
-
-자세한 사용법은
-[wikiman-flutter README (한국어)](https://github.com/kendrickkim/wikiman-flutter/blob/master/README-kr.md)
-· [English](https://github.com/kendrickkim/wikiman-flutter/blob/master/README.md)를 보세요.
-
-## API 계약 (공통)
-
-성공 응답은 Wikiman 전용 형식입니다. PHAST 기본 `{ success, data }` 래핑을 PHP 경로에서는 쓰지 않습니다.
-
-```json
-{ "posts": [], "total": 0, "page": 1, "pageSize": 10 }
-```
-
-오류:
-
-```json
-{ "error": "ERROR_CODE", "params": { } }
-```
-
-API는 안정적인 오류 코드를 반환하고, 프론트엔드가 사이트 언어에 맞게 번역해 표시합니다.
-
-인증:
-
-```http
-Authorization: Bearer <jwt>
-```
-
-주요 경로 예:
-
-- `GET/POST /auth/*`
-- `GET/POST/PATCH/DELETE /categories*`
-- `GET/POST/PATCH/DELETE /posts*`
-- `GET/POST/PATCH/DELETE /quick-posts*`
-- `POST /uploads*`, `GET /files/{name}`
-- `GET/PATCH /settings`, `GET/PUT /settings/top-menu`
-- `GET /link-preview`, `GET|DELETE /link-preview/cache`
-- `GET /backup/download`, `POST /backup/inspect|restore`
-- `GET|POST /plantuml*`
-
-## 보안·운영 메모
-
-- `JWT_SECRET`(또는 PHP의 `.jwt-secret`)을 운영에서 반드시 강하게 설정하세요.
-- `data/`, `.env`, 업로드 파일을 공개 저장소에 올리지 마세요.
-- PHP 경로에서 링크 미리보기·PlantUML은 내부망(SSRF) 접근을 차단합니다.
-- 백업 복원은 DB와 업로드를 통째로 덮어씁니다. 복구 전 현재 데이터를 따로 보관하세요.
-
-## 라이선스·기여
-
-각 하위 저장소의 LICENSE·기여 규칙을 따릅니다.  
-이 허브 저장소의 문서는 Wikiman 구성을 설명하기 위한 것입니다.
-
-## 링크
-
-- Frontend: https://github.com/kendrickkim/wikiman-frontend  
-- Backend (Node): https://github.com/kendrickkim/wikiman-backend  
-- Backend (PHP): https://github.com/kendrickkim/wikiman-backend-php  
-- Flutter (관리자 앱): https://github.com/kendrickkim/wikiman-flutter  
-- PHAST API v2: https://github.com/kendrickkim/phastapiv2  
+각 구성요소의 세부 설정은 해당 저장소 README에 정리되어 있습니다.
